@@ -47,11 +47,11 @@ UH2 = np.zeros(2 * maxDayDelay)
 max=0
 
 # x1 [10 700]; x2 [-5.5 3.5]; x3 [20 400]; x4 [1.0 2.5]
-for x1 in range(310,700,50):
-    for x2 in range(-55,35,5):
+for x1 in range(305,315,1):
+    for x2 in range(10,20,1):
         x2=x2/10
-        for x3 in range(20,400,50):
-            for x4 in range(10,25,2):
+        for x3 in range(20,25,1):
+            for x4 in range(20,25,1):
                 x4=x4/10
                 import numpy as np
                 from mytools import *
