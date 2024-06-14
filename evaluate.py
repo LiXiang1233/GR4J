@@ -29,14 +29,14 @@ def evaluate_gr4j_model(nStep, Qobs_mm, Q):
 
     # 评估径流模拟效果：模型流域出口断面流量及模拟得到的流域出口断面流量
     # 绘制相关图
-    # axis = range(1, nStep + 1)
-    # plt.figure()
-    # plt.plot(axis, Q, 'r--', label='模拟径流量')
-    # plt.plot(axis, Qobs_mm, 'k-', label='观测径流量')
-    # plt.title('GR4J模型模拟效果图, NSE=' + str(NSE))
-    # plt.xlabel('时间（天）')
-    # plt.ylabel('流量（mm/d）')
-    # plt.legend()
-    # plt.show()
+    axis = range(1, nStep + 1)
+    plt.figure()
+    plt.plot(axis, Q, 'r--', label='模拟径流量')
+    plt.plot(axis, Qobs_mm, 'k-', label='观测径流量')
+    plt.title('GR4J模型模拟效果图, NSE=' + str(NSE))
+    plt.xlabel('时间（天）')
+    plt.ylabel('流量（mm/d）')
+    plt.legend()
+    plt.show()
     return NSE
 

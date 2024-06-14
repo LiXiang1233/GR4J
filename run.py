@@ -47,61 +47,49 @@ UH2 = np.zeros(2 * maxDayDelay)
 max=0
 
 # x1 [10 700]; x2 [-5.5 3.5]; x3 [20 400]; x4 [1.0 2.5]
-for x1 in range(305,315,1):
-    for x2 in range(10,20,1):
-        x2=x2/10
-        for x3 in range(20,25,1):
-            for x4 in range(20,25,1):
-                x4=x4/10
-                import numpy as np
-                from mytools import *
+x1=305
+x2=1.8
+x3=22
+x4=2.3
+import numpy as np
+from mytools import *
 
-                # 计算SH1以及SH2，由于i是从0开始的，为避免第一个数值为0，我们在函数钟使用i+1
-                for i in range(maxDayDelay):
-                    SH1[i] = SH1_CURVE(i, x4)
+# 计算SH1以及SH2，由于i是从0开始的，为避免第一个数值为0，我们在函数钟使用i+1
+for i in range(maxDayDelay):
+    SH1[i] = SH1_CURVE(i, x4)
 
-                for i in range(2 * maxDayDelay):
-                    SH2[i] = SH2_CURVE(i, x4)
+for i in range(2 * maxDayDelay):
+    SH2[i] = SH2_CURVE(i, x4)
 
-                # 计算UH1以及UH2
-                for i in range(maxDayDelay):
-                    if i == 0:
-                        UH1[i] = SH1[i]
-                    else:
-                        UH1[i] = SH1[i] - SH1[i - 1]
+# 计算UH1以及UH2
+for i in range(maxDayDelay):
+    if i == 0:
+        UH1[i] = SH1[i]
+    else:
+        UH1[i] = SH1[i] - SH1[i - 1]
 
-                for i in range(2 * maxDayDelay):
-                    if i == 0:
-                        UH2[i] = SH2[i]
-                    else:
-                        UH2[i] = SH2[i] - SH2[i - 1]
+for i in range(2 * maxDayDelay):
+    if i == 0:
+        UH2[i] = SH2[i]
+    else:
+        UH2[i] = SH2[i] - SH2[i - 1]
 
-                # 计算逐日En及Pn值，En及Pn为GR4J模型的输入，可以提前计算出来
-                for i in range(nStep):
-                    if P[i] >= E[i]:  # 若当日降雨量大于等于当日蒸发量，净降雨量Pn = P - E，净蒸发能力En = 0
-                        Pn[i] = P[i] - E[i]
-                        En[i] = 0
-                    else:  # 若当日降雨量小于当日蒸发量，净降雨量Pn = 0，净蒸发能力En = E - P
-                        Pn[i] = 0
-                        En[i] = E[i] - P[i]
+# 计算逐日En及Pn值，En及Pn为GR4J模型的输入，可以提前计算出来
+for i in range(nStep):
+    if P[i] >= E[i]:  # 若当日降雨量大于等于当日蒸发量，净降雨量Pn = P - E，净蒸发能力En = 0
+        Pn[i] = P[i] - E[i]
+        En[i] = 0
+    else:  # 若当日降雨量小于当日蒸发量，净降雨量Pn = 0，净蒸发能力En = E - P
+        Pn[i] = 0
+        En[i] = E[i] - P[i]
 
-                # Q值的计算
-                from simulate import *
+# Q值的计算
+from simulate import *
 
-                Q = simulate_gr4j(nStep, x1, x2, x3, x4, upperTankRatio, lowerTankRatio, maxDayDelay, UH1, UH2, Pn, En)
+Q = simulate_gr4j(nStep, x1, x2, x3, x4, upperTankRatio, lowerTankRatio, maxDayDelay, UH1, UH2, Pn, En)
 
-                # 精度评估和绘图
-                from evaluate import *
-                
-                NSE=evaluate_gr4j_model(nStep, Qobs_mm, Q)
-                print(x1,x2,x3,x4,NSE)
+# 精度评估和绘图
+from evaluate import *
 
-                # 寻找最大值及此时的参数
-                if NSE>max:
-                    max=NSE
-                    x11=x1
-                    x22=x2
-                    x33=x3
-                    x44=x4
-print(x11,x22,x33,x44,max)
+NSE=evaluate_gr4j_model(nStep, Qobs_mm, Q)
 print("GR4J Simulation Finished")
